@@ -1,0 +1,82 @@
+# repokit configuration version.
+version: 2
+
+# Standalone repository:
+# repokit will NOT create a go.work file.
+mode: standalone
+
+# Shared development tooling repository.
+#
+# repokit temporarily clones this repository into:
+# .repokit/tooling/
+#
+# Only files declared below are copied into the current repository.
+tooling:
+  # Git repository containing shared development tooling.
+  repository: "git@github.com:your-org/shared-tooling.git"
+
+  # Explicitly pinned version of the tooling repository.
+  ref: "v1.2.0"
+  ref_type: tag
+
+  files:
+    # Copy a single file.
+    - source: golangci/.golangci.yml
+      destination: .golangci.yml
+      required: true
+
+    # Optional file.
+    # If it does not exist, repokit prints a warning and continues.
+    - source: lefthook/lefthook.yml
+      destination: lefthook.yml
+      required: false
+
+    # Recursive glob.
+    #
+    # For example:
+    # configs/base.yaml
+    # configs/dev/local.yaml
+    # configs/prod/production.yaml
+    #
+    # The directory structure from the tooling repository is preserved.
+    - source: configs/**/*.yaml
+      destination: .
+      required: false
+
+    # Copy an executable script.
+    #
+    # executable: true makes the destination file executable (0755).
+    - source: scripts/lint.sh
+      destination: scripts/lint.sh
+      required: false
+      executable: true
+
+    # Install a Git commit-msg hook.
+    - source: git-hooks/commit-msg
+      destination: .git/hooks/commit-msg
+      required: true
+      executable: true
+
+# Commands executed after repository synchronization is complete.
+#
+# Commands are executed from the project root.
+# A command may be:
+#   - a project-local executable/script;
+#   - a command available through PATH (go, make, git, etc.).
+hooks:
+  post_sync:
+    # Run a project-local script.
+    - command: scripts/setup.sh
+      required: true
+
+    # Run a command available through PATH.
+    - command: go
+      args:
+        - generate
+      required: false
+
+    # Run Make target with arguments.
+    - command: make
+      args:
+        - generate
+      required: false

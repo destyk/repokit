@@ -1,0 +1,27 @@
+types:
+  - feat
+  - fix
+  - docs
+  - style
+  - refactor
+  - perf
+  - test
+  - build
+  - ci
+  - chore
+  - revert
+
+description:
+  min: 1
+  max: 72
+  lowercase: true
+
+scope:
+  required: false
+
+header:
+  max_length: 100
+
+rules:
+  no_trailing_period: true
+  breaking_change_footer: true

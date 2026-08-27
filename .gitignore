@@ -1,0 +1,32 @@
+# Binaries
+/repokit
+/repokit.exe
+
+# Build artifacts
+/bin/
+/dist/
+
+# Coverage
+coverage.out
+coverage.html
+
+# Test artifacts
+*.test
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# Environment
+.env
+.env.*
+!.env.example

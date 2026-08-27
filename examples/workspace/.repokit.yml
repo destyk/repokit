@@ -1,0 +1,96 @@
+# repokit configuration version.
+version: 2
+
+# Workspace repository:
+# repokit will synchronize services and generate go.work.
+mode: workspace
+
+# Shared development tooling repository.
+tooling:
+  # Git repository containing common tooling for all services.
+  repository: "git@github.com:your-org/shared-tooling.git"
+
+  # Pin tooling to an explicit version.
+  ref: "v1.2.0"
+  ref_type: tag
+
+  files:
+    # Required linter configuration.
+    - source: golangci/.golangci.yml
+      destination: .golangci.yml
+      required: true
+
+    # Optional Lefthook configuration.
+    - source: lefthook/lefthook.yml
+      destination: lefthook.yml
+      required: false
+
+    # Recursively copy all YAML configuration files.
+    #
+    # Directory structure is preserved:
+    #
+    # configs/base.yaml
+    # configs/dev/local.yaml
+    # configs/prod/production.yaml
+    #
+    # becomes:
+    #
+    # <workspace>/configs/...
+    - source: configs/**/*.yaml
+      destination: .
+      required: false
+
+    # Install an executable helper script.
+    - source: scripts/lint.sh
+      destination: scripts/lint.sh
+      required: false
+      executable: true
+
+    # Install a commit-msg Git hook.
+    - source: git-hooks/commit-msg
+      destination: .git/hooks/commit-msg
+      required: true
+      executable: true
+
+# Commands executed after the whole initialization process is complete.
+#
+# This is intentionally separate from "tooling".
+# Hooks are not required to come from the tooling repository.
+hooks:
+  post_sync:
+    # Project-local setup script.
+    - command: scripts/setup.sh
+      required: true
+
+    # Generate Go code after all repositories have been synchronized.
+    - command: go
+      args:
+        - generate
+      required: false
+
+    # Run project-wide generation.
+    - command: make
+      args:
+        - generate
+      required: false
+
+repositories:
+  # Optional service.
+  #
+  # If the repository is unavailable, initialization continues.
+  - name: catalog
+    url: git@github.com:your-org/catalog.git
+    ref: main
+    ref_type: branch
+    required: false
+    path: services/catalog
+    runner: make
+
+  # Optional embedding service.
+  - name: embedding
+    url: git@github.com:your-org/embedding.git
+    ref: main
+    ref_type: branch
+    required: false
+    path: services/embedding
+    runner: make
