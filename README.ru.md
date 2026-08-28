@@ -9,7 +9,7 @@
 Вы сами выбираете, какие репозитории включать и какой tooling использовать.
 Всё явно закрепляется веткой или тегом.
 
-[English version](README.md) · [Техническая документация](docs/README.ru.md)
+[English version](README.md) · [Техническая документация](CONTRIBUTING.ru.md)
 
 ---
 
@@ -110,7 +110,7 @@ repositories:
 | `mise`   | `mise run <target> [args…]`   |                          |
 
 Поле `runner` **обязательно** для каждой записи в `repositories`. Как добавить
-новый runner — в [технической документации](docs/README.ru.md#добавление-runner).
+новый runner — в [технической документации](CONTRIBUTING.ru.md#добавление-runner).
 
 ## Почему так устроено
 
@@ -124,7 +124,7 @@ repositories:
 ## Участие в разработке
 
 Архитектура, публичные адаптеры, загрузка конфига, runners и примеры
-библиотечного API — в **[docs/](docs/README.ru.md)**.
+библиотечного API — в **[CONTRIBUTING.md](CONTRIBUTING.ru.md)**.
 
 Начните оттуда, если хотите расширять repokit или встраивать его в свои инструменты.
 

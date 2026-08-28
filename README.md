@@ -9,7 +9,7 @@ without prescribing a particular stack.
 You choose which repositories to include and which tooling to use.
 Everything is explicitly pinned to a branch or tag.
 
-[Русская версия](README.ru.md) · [Technical documentation](docs/README.md)
+[Русская версия](README.ru.md) · [Technical documentation](CONTRIBUTING.md)
 
 ---
 
@@ -110,7 +110,7 @@ Built-in runners:
 | `mise`   | `mise run <target> [args…]`   |                          |
 
 `runner` is **required** for every repository entry. Adding a new runner is
-described in the [technical docs](docs/README.md#adding-a-runner).
+described in the [technical docs](CONTRIBUTING.md#adding-a-runner).
 
 ## Why this design
 
@@ -124,7 +124,7 @@ described in the [technical docs](docs/README.md#adding-a-runner).
 ## Contributing
 
 Architecture, public adapters, config loading, runners, and library examples
-are documented in **[docs/](docs/README.md)**.
+are documented in **[CONTRIBUTING.md](CONTRIBUTING.md)**.
 
 Start there if you want to extend repokit or embed it in your own tools.
 

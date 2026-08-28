@@ -1,9 +1,9 @@
 # repokit — техническая документация
 
 Документ для контрибьюторов и тех, кто встраивает repokit как библиотеку.
-Обзор продукта и "зачем это" — в [корневом README](../README.ru.md).
+Обзор продукта и "зачем это" — в [корневом README](README.ru.md).
 
-[English version](README.md)
+[English version](CONTRIBUTING.md)
 
 ---
 
@@ -75,8 +75,8 @@ repositories:
     path: services/users
 ```
 
-Полные примеры: [`examples/standalone/`](../examples/standalone/),
-[`examples/workspace/`](../examples/workspace/).
+Полные примеры: [`examples/standalone/`](examples/standalone/),
+[`examples/workspace/`](examples/workspace/).
 
 Валидация однообразная: у каждого блока `Validate()` с префиксами путей
 полей (`tooling:`, `repositories[0]:`, …).

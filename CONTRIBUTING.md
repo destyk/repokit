@@ -1,9 +1,9 @@
 # repokit — technical documentation
 
 This document is for contributors and anyone embedding repokit as a library.
-For a product overview and “why use this”, see the [root README](../README.md).
+For a product overview and “why use this”, see the [root README](README.md).
 
-[Русская версия](README.ru.md)
+[Русская версия](CONTRIBUTING.ru.md)
 
 ---
 
@@ -75,8 +75,8 @@ repositories:
     path: services/users
 ```
 
-Full examples: [`examples/standalone/`](../examples/standalone/),
-[`examples/workspace/`](../examples/workspace/).
+Full examples: [`examples/standalone/`](examples/standalone/),
+[`examples/workspace/`](examples/workspace/).
 
 Validation is uniform: every block implements `Validate()` with field-path
 error prefixes (`tooling:`, `repositories[0]:`, ...).
