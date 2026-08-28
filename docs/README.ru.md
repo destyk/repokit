@@ -192,6 +192,58 @@ _, err = runner.Run(ctx, "make", dir, "lint", nil, runner.Options{
 
 ---
 
+## Добавление runner
+
+Runners живут в `internal/runner`. Публичный пакет `runner` только реэкспортирует их.
+
+### 1. Зарегистрировать встроенный
+
+В `internal/runner/builtins.go` добавьте строку в `Builtins()`:
+
+```go
+func Builtins() []Runner {
+    return []Runner{
+        // ...
+        NewExecRunner("mytool", false), // direct: mytool <target> [args…]
+        // NewExecRunner("mytool", true)  // script: mytool run <target> [args…]
+    }
+}
+```
+
+- `scriptStyle=false` -> `mytool <target> [args…]` (make, go, pnpm, …)
+- `scriptStyle=true` -> `mytool run <target> [args…]` (npm, bun, poetry, uv, mise)
+
+### 2. Разрешить в валидации конфига
+
+В `internal/config/repository.go` добавьте имя в `AllowedRunners`, чтобы
+`.repokit.yml` принимал `runner: mytool`.
+
+**Builtins** и **AllowedRunners** должны совпадать.
+
+### 3. Свой runner (не через exec)
+
+Реализуйте `runner.Runner`:
+
+```go
+type Runner interface {
+    Name() string
+    Run(ctx context.Context, dir, target string, args []string, opts Options) (Result, error)
+}
+```
+
+Зарегистрируйте через `runner.NewRegistry(...)` или добавьте в `Builtins()`.
+
+### 4. Контракт IO
+
+- CLI передаёт `Options{Stdout, Stderr, Stdin}` для **стрима** в терминал.
+- Программный вызов оставляет streams `nil`, чтобы **захватить** вывод в
+  `Result.Stdout` / `Result.Stderr`.
+
+Не пишите в `os.Stdout` из кода runner — возвращайте данные или используйте
+переданные writer’ы.
+
+---
+
 ## Разработка
 
 ```bash

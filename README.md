@@ -78,6 +78,40 @@ repokit <service>/<target> [args...]   # e.g. catalog/lint
 
 ---
 
+## Supported runners
+
+Each workspace service declares a **runner** in `.repokit.yml` — the tool used
+when you call `repokit <service>/<target>`:
+
+```yaml
+repositories:
+  - name: catalog
+    url: git@github.com:acme/catalog.git
+    ref: v1.8.0
+    ref_type: tag
+    runner: make # <- here
+```
+
+Built-in runners:
+
+| Runner   | Invocation style              | Example                  |
+| -------- | ----------------------------- | ------------------------ |
+| `make`   | `make <target> [args…]`       | `repokit catalog/lint`   |
+| `go`     | `go <target> [args…]`         | `repokit api/test ./...` |
+| `just`   | `just <target> [args…]`       |                          |
+| `task`   | `task <target> [args…]`       |                          |
+| `npm`    | `npm run <target> [args…]`    | `repokit web/build`      |
+| `pnpm`   | `pnpm <target> [args…]`       |                          |
+| `yarn`   | `yarn <target> [args…]`       |                          |
+| `bun`    | `bun run <target> [args…]`    |                          |
+| `cargo`  | `cargo <target> [args…]`      |                          |
+| `uv`     | `uv run <target> [args…]`     |                          |
+| `poetry` | `poetry run <target> [args…]` |                          |
+| `mise`   | `mise run <target> [args…]`   |                          |
+
+`runner` is **required** for every repository entry. Adding a new runner is
+described in the [technical docs](docs/README.md#adding-a-runner).
+
 ## Why this design
 
 - **Explicit pins** — every external repo is locked to a tag or branch; no floating `latest`.

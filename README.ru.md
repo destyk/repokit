@@ -78,6 +78,40 @@ repokit <service>/<target> [args...]   # например catalog/lint
 
 ---
 
+## Поддерживаемые runners
+
+У каждого сервиса в workspace в `.repokit.yml` указывается **runner** — инструмент,
+которым вызывается `repokit <service>/<target>`:
+
+```yaml
+repositories:
+  - name: catalog
+    url: git@github.com:acme/catalog.git
+    ref: v1.8.0
+    ref_type: tag
+    runner: make # <- здесь
+```
+
+Встроенные runners:
+
+| Runner   | Стиль вызова                  | Пример                   |
+| -------- | ----------------------------- | ------------------------ |
+| `make`   | `make <target> [args…]`       | `repokit catalog/lint`   |
+| `go`     | `go <target> [args…]`         | `repokit api/test ./...` |
+| `just`   | `just <target> [args…]`       |                          |
+| `task`   | `task <target> [args…]`       |                          |
+| `npm`    | `npm run <target> [args…]`    | `repokit web/build`      |
+| `pnpm`   | `pnpm <target> [args…]`       |                          |
+| `yarn`   | `yarn <target> [args…]`       |                          |
+| `bun`    | `bun run <target> [args…]`    |                          |
+| `cargo`  | `cargo <target> [args…]`      |                          |
+| `uv`     | `uv run <target> [args…]`     |                          |
+| `poetry` | `poetry run <target> [args…]` |                          |
+| `mise`   | `mise run <target> [args…]`   |                          |
+
+Поле `runner` **обязательно** для каждой записи в `repositories`. Как добавить
+новый runner — в [технической документации](docs/README.ru.md#добавление-runner).
+
 ## Почему так устроено
 
 - **Явные пины** — каждый внешний репозиторий зафиксирован тегом или веткой; никакого плавающего `latest`.

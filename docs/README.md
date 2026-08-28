@@ -192,6 +192,56 @@ whole run when missing.
 
 ---
 
+## Adding a runner
+
+Runners live in `internal/runner`. The public package `runner` only re-exports them.
+
+### 1. Register a built-in
+
+In `internal/runner/builtins.go`, add a line to `Builtins()`:
+
+```go
+func Builtins() []Runner {
+    return []Runner{
+        // ...
+        NewExecRunner("mytool", false), // direct: mytool <target> [args…]
+        // NewExecRunner("mytool", true)  // script: mytool run <target> [args…]
+    }
+}
+```
+
+- `scriptStyle=false` -> `mytool <target> [args…]` (make, go, pnpm, …)
+- `scriptStyle=true` -> `mytool run <target> [args…]` (npm, bun, poetry, uv, mise)
+
+### 2. Allow it in config validation
+
+In `internal/config/repository.go`, append the name to `AllowedRunners` so
+`.repokit.yml` accepts `runner: mytool`.
+
+Keep **Builtins** and **AllowedRunners** in sync.
+
+### 3. Custom runner (non-exec)
+
+Implement `runner.Runner`:
+
+```go
+type Runner interface {
+    Name() string
+    Run(ctx context.Context, dir, target string, args []string, opts Options) (Result, error)
+}
+```
+
+Register it with `runner.NewRegistry(...)` or add it to `Builtins()`.
+
+### 4. IO contract
+
+- CLI passes `Options{Stdout, Stderr, Stdin}` to **stream** to the terminal.
+- Programmatic callers leave streams `nil` to **capture** into `Result.Stdout` / `Result.Stderr`.
+
+Do not write to `os.Stdout` from runner code — return data or use the provided writers.
+
+---
+
 ## Development
 
 ```bash
